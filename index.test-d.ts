@@ -51,5 +51,3 @@ ipcRenderer.answerMain('get-emoji', emojiName => {
 
 expectType<() => void>(detachListener2);
 detachListener();
-
-expectError(ipcRenderer.callRenderer);
