@@ -6,7 +6,7 @@ const util = require('./util');
 const {ipcMain, BrowserWindow} = electron;
 const ipc = Object.create(ipcMain || {});
 
-ipc.callRenderer = (browserWindow, channel, data) => new Promise((resolve, reject) => {
+ipc.callRenderer = (browserWindow, channel, ...args) => new Promise((resolve, reject) => {
 	const {sendChannel, dataChannel, errorChannel} = util.getRendererResponseChannels(browserWindow.id, channel);
 
 	const cleanup = () => {
@@ -35,7 +35,7 @@ ipc.callRenderer = (browserWindow, channel, data) => new Promise((resolve, rejec
 	const completeData = {
 		dataChannel,
 		errorChannel,
-		userData: data
+		userArgs: args
 	};
 
 	if (browserWindow.webContents) {
@@ -55,10 +55,10 @@ ipc.answerRenderer = (channel, callback) => {
 			}
 		};
 
-		const {dataChannel, errorChannel, userData} = data;
+		const {dataChannel, errorChannel, userArgs} = data;
 
 		try {
-			send(dataChannel, await callback(userData, browserWindow));
+			send(dataChannel, await callback(...userArgs));
 		} catch (error) {
 			send(errorChannel, serializeError(error));
 		}

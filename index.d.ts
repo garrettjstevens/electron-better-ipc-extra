@@ -8,7 +8,7 @@ export interface MainProcessIpc extends IpcMain {
 
 	@param browserWindow - The window to send the message to.
 	@param channel - The channel to send the message on.
-	@param data - The data to send to the receiver.
+	@param ...args - The arguments to send to the receiver.
 	@returns - The reply from the renderer process.
 
 	@example
@@ -28,7 +28,7 @@ export interface MainProcessIpc extends IpcMain {
 	callRenderer<T>(
 		browserWindow: BrowserWindow,
 		channel: string,
-		data?: T
+		...args: T[]
 	): Promise<unknown>;
 
 	/**
@@ -50,10 +50,7 @@ export interface MainProcessIpc extends IpcMain {
 	*/
 	answerRenderer<T>(
 		channel: string,
-		callback: (
-			data: unknown,
-			browserWindow: BrowserView
-		) => T | PromiseLike<T>
+		callback: (...data: unknown[]) => T | PromiseLike<T>
 	): () => void;
 
 	/**
@@ -72,7 +69,7 @@ export interface RendererProcessIpc extends IpcRenderer {
 	In the main process, use `ipcMain.answerRenderer` to reply to this message.
 
 	@param channel - The channel to send the message on.
-	@param data - The data to send to the receiver.
+	@param ...args - The arguments to send to the receiver.
 	@returns The reply from the main process.
 
 	@example
@@ -86,7 +83,7 @@ export interface RendererProcessIpc extends IpcRenderer {
 	})();
 	```
 	*/
-	callMain<T>(channel: string, data?: T): Promise<unknown>;
+	callMain<T>(channel: string, ...args: T[]): Promise<unknown>;
 
 	/**
 	This method listens for a message from `ipcMain.callRenderer` defined in the main process and replies back.
@@ -107,7 +104,7 @@ export interface RendererProcessIpc extends IpcRenderer {
 	*/
 	answerMain<T>(
 		channel: string,
-		callback: (data?: unknown) => T | PromiseLike<T>
+		callback: (...args: unknown[]) => T | PromiseLike<T>
 	): () => void;
 }
 

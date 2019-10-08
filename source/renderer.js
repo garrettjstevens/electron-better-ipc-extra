@@ -6,7 +6,7 @@ const util = require('./util');
 const {ipcRenderer} = electron;
 const ipc = Object.create(ipcRenderer || {});
 
-ipc.callMain = (channel, data) => new Promise((resolve, reject) => {
+ipc.callMain = (channel, ...args) => new Promise((resolve, reject) => {
 	const {sendChannel, dataChannel, errorChannel} = util.getResponseChannels(channel);
 
 	const cleanup = () => {
@@ -35,7 +35,7 @@ ipc.callMain = (channel, data) => new Promise((resolve, reject) => {
 	const completeData = {
 		dataChannel,
 		errorChannel,
-		userData: data
+		userArgs: args
 	};
 
 	ipc.send(sendChannel, completeData);
@@ -46,10 +46,10 @@ ipc.answerMain = (channel, callback) => {
 	const sendChannel = util.getRendererSendChannel(browserWindow.id, channel);
 
 	const listener = async (event, data) => {
-		const {dataChannel, errorChannel, userData} = data;
+		const {dataChannel, errorChannel, userArgs} = data;
 
 		try {
-			ipc.send(dataChannel, await callback(userData));
+			ipc.send(dataChannel, await callback(...userArgs));
 		} catch (error) {
 			ipc.send(errorChannel, serializeError(error));
 		}

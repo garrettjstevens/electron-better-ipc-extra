@@ -108,13 +108,13 @@ The module exports `ipcMain` and `ipcRenderer` objects which enhance the built-i
 
 ## Main process
 
-### ipcMain.callRenderer(browserWindow, channel, [data])
+### ipcMain.callRenderer(browserWindow, channel, ...data)
 
 Send a message to the given window.
 
 In the renderer process, use `ipcRenderer.answerMain` to reply to this message.
 
-Returns a `Promise<unknown>` with the reply from the renderer process..
+Returns a `Promise<unknown>` with the reply from the renderer process.
 
 #### browserWindow
 
@@ -128,7 +128,7 @@ Type: `string`
 
 The channel to send the message on.
 
-#### data
+#### ...data
 
 Type: `unknown`
 
@@ -146,13 +146,13 @@ Type: `string`
 
 The channel to send the message on.
 
-#### callback([data], browserWindow)
+#### callback(...data)
 
 Type: `Function | AsyncFunction`
 
 The return value is sent back to the `ipcRenderer.callMain` in the renderer process.
 
-### ipcMain.sendToRenderers(channel, [data])
+### ipcMain.sendToRenderers(channel, ...data)
 
 Send a message to all renderer processes (windows).
 
@@ -170,7 +170,7 @@ The data to send to the receiver.
 
 ## Renderer process
 
-### ipcRenderer.callMain(channel, [data])
+### ipcRenderer.callMain(channel, ...data)
 
 Send a message to the main process.
 
@@ -184,7 +184,7 @@ Type: `string`
 
 The channel to send the message on.
 
-#### data
+#### ...data
 
 Type: `unknown`
 
@@ -202,7 +202,7 @@ Type: `string`
 
 The channel to send the message on.
 
-#### callback([data])
+#### callback(...data)
 
 Type: `Function` `AsyncFunction`
 
