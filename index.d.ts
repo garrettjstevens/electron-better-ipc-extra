@@ -106,6 +106,58 @@ export interface RendererProcessIpc extends IpcRenderer {
 		channel: string,
 		callback: (...args: unknown[]) => T | PromiseLike<T>
 	): () => void;
+
+	/**
+	Send a message to the given window.
+
+	In the renderer process, use `ipcRenderer.answerRenderer` to reply to this message.
+
+	@param browserWindow - The window to send the message to.
+	@param channel - The channel to send the message on.
+	@param ...args - The arguments to send to the receiver.
+	@returns - The reply from the renderer process.
+
+	@example
+	```
+	import {BrowserWindow} from 'electron';
+	import {ipcMain as ipc} from 'electron-better-ipc';
+
+	const browserWindow = BrowserWindow.getFocusedWindow();
+
+	(async () => {
+		const emoji = await ipc.callRenderer(browserWindow!, 'get-emoji', 'unicorn');
+		console.log(emoji);
+		//=> '🦄'
+	})();
+	```
+	*/
+	callRenderer<T>(
+		browserWindow: BrowserWindow,
+		channel: string,
+		...args: T[]
+	): Promise<unknown>;
+
+	/**
+	This method listens for a message from `ipcRenderer.callMain` defined in a renderer process and replies back.
+
+	@param channel - The channel to send the message on.
+	@param callback - The return value is sent back to the `ipcRenderer.callMain` in the renderer process.
+	@returns A function, that when called, removes the listener.
+
+	@example
+	```
+	import {ipcMain as ipc} from 'electron-better-ipc';
+
+	ipc.answerRenderer('get-emoji', async emojiName => {
+		const emoji = await getEmoji(emojiName);
+		return emoji;
+	});
+	```
+	*/
+	answerRenderer<T>(
+		channel: string,
+		callback: (...data: unknown[]) => T | PromiseLike<T>
+	): () => void;
 }
 
 export const ipcMain: MainProcessIpc;
