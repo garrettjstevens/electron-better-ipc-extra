@@ -1,13 +1,12 @@
 {
-	"name": "electron-better-ipc",
-	"version": "0.6.0",
-	"description": "Simplified IPC communication for Electron apps",
+	"name": "electron-better-ipc-extra",
+	"version": "0.1.0",
+	"description": "Simplified IPC communication for Electron apps, with extras",
 	"license": "MIT",
-	"repository": "sindresorhus/electron-better-ipc",
+	"repository": "garrettjstevens/electron-better-ipc-extras",
 	"author": {
-		"name": "Sindre Sorhus",
-		"email": "sindresorhus@gmail.com",
-		"url": "sindresorhus.com"
+		"name": "Garrett Stevens",
+		"email": "stevens.garrett.j@gmail.com"
 	},
 	"scripts": {
 		"test": "xo && tsd",
