@@ -102,12 +102,12 @@ ipc.answerRenderer = (channel, callback) => {
 	const sendChannel = util.getRendererSendChannel(browserWindow.id, channel);
 
 	const listener = async (event, data) => {
-		const webContents = electron.remote.webContents.fromId(event.id);
+		const webContents = electron.remote.webContents.fromId(event.senderId);
 		const browserWindow = electron.remote.BrowserWindow.fromWebContents(webContents);
 
 		const send = (channel, data) => {
 			if (!(browserWindow && browserWindow.isDestroyed())) {
-				event.sender.sendTo(event.sender.id, channel, data);
+				event.sender.sendTo(event.senderId, channel, data);
 			}
 		};
 
